@@ -20,10 +20,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @OnlyIn(Dist.CLIENT)
 @Mixin(InventoryScreen.class)
-public class InventoryScreenMixin extends EffectRenderingInventoryScreen<InventoryMenu> implements RecipeUpdateListener {
+public class InventoryScreenMixin extends EffectRenderingInventoryScreen<InventoryMenu> {
     public InventoryScreenMixin(InventoryMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
     }
+
+    @Override
+    protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {}
 
     @Inject(method = "hasClickedOutside", at = @At("TAIL"), cancellable = true)
     private void scout$adjustOutsideBounds(double mouseX, double mouseY, int left, int top, int button, CallbackInfoReturnable<Boolean> callbackInfo) {
@@ -61,17 +64,5 @@ public class InventoryScreenMixin extends EffectRenderingInventoryScreen<Invento
                 }
             }
         }
-    }
-
-    protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
-
-    }
-
-    public void recipesUpdated() {
-
-    }
-
-    public RecipeBookComponent getRecipeBookComponent() {
-        return null;
     }
 }

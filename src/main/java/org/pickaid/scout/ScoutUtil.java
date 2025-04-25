@@ -23,9 +23,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class ScoutUtil {
 	public static final Logger LOGGER = LoggerFactory.getLogger("Scout");
@@ -42,6 +40,11 @@ public class ScoutUtil {
 	public static final int LEFT_POUCH_SLOT_START = SATCHEL_SLOT_START - MAX_SATCHEL_SLOTS;
 	public static final int RIGHT_POUCH_SLOT_START = LEFT_POUCH_SLOT_START - MAX_POUCH_SLOTS;
 	public static final int BAG_SLOTS_END = RIGHT_POUCH_SLOT_START - MAX_POUCH_SLOTS;
+
+	private static final Map<Player, SimpleContainer> SATCHEL_CONTAINERS = new WeakHashMap<>();
+	private static final Map<Player, SimpleContainer> LEFT_POUCH_CONTAINERS = new WeakHashMap<>();
+	private static final Map<Player, SimpleContainer> RIGHT_POUCH_CONTAINERS = new WeakHashMap<>();
+
 
 	public static net.minecraft.world.item.ItemStack findBagItem(Player player, BaseBagItem.BagType type, boolean right) {
 		ItemStack targetStack = ItemStack.EMPTY;
@@ -72,34 +75,42 @@ public class ScoutUtil {
 		return targetStack;
 	}
 
+	// 修复inventoryToTag方法
 	public static CompoundTag inventoryToTag(Container inventory) {
-        CompoundTag tag = new CompoundTag();
+		CompoundTag tag = new CompoundTag();
+		ListTag items = new ListTag();
 
 		for(int i = 0; i < inventory.getContainerSize(); i++) {
-            CompoundTag stackTag = new CompoundTag();
-			stackTag.putInt("Slot", i);
-			stackTag.put("Stack", inventory.getItem(i).save(new CompoundTag()));
-			tag = stackTag;
+			ItemStack stack = inventory.getItem(i);
+			if (!stack.isEmpty()) {
+				CompoundTag stackTag = new CompoundTag();
+				stackTag.putInt("Slot", i);
+				stackTag.put("Stack", stack.save(new CompoundTag()));
+				items.add(stackTag);
+			}
 		}
 
+		tag.put("Items", items);
 		return tag;
 	}
 
+	// 修复inventoryFromTag方法
 	public static void inventoryFromTag(ListTag tag, SimpleContainer inventory) {
 		inventory.clearContent();
-		tag.forEach(element -> {
-			CompoundTag stackTag = (CompoundTag) element;
+
+		for (int i = 0; i < tag.size(); i++) {
+			CompoundTag stackTag = tag.getCompound(i);
 			int slot = stackTag.getInt("Slot");
-            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(stackTag.getString("id")));
-            ItemStack stack = null;
-            if (item != null) {
-                stack = new ItemStack(item);
-                stack.setTag(stackTag);
-            } else {
-                return;
-            }
-            inventory.setItem(slot, stack);
-		});
+
+			if (slot >= 0 && slot < inventory.getContainerSize()) {
+				CompoundTag itemTag = stackTag.getCompound("Stack");
+				ItemStack stack = ItemStack.of(itemTag);
+
+				if (!stack.isEmpty()) {
+					inventory.setItem(slot, stack);
+				}
+			}
+		}
 	}
 
 	public static boolean isBagSlot(int slot) {
@@ -135,5 +146,18 @@ public class ScoutUtil {
 		out.addAll(scoutScreenHandler.scout$getLeftPouchSlots());
 		out.addAll(scoutScreenHandler.scout$getRightPouchSlots());
 		return out;
+	}
+
+	public static SimpleContainer getSatchelContainer(Player player) {
+		return SATCHEL_CONTAINERS.computeIfAbsent(player, p ->
+				new SimpleContainer(MAX_SATCHEL_SLOTS));
+	}
+	public static SimpleContainer getLeftPouchContainer(Player player) {
+		return LEFT_POUCH_CONTAINERS.computeIfAbsent(player, p ->
+				new SimpleContainer(MAX_POUCH_SLOTS));
+	}
+	public static SimpleContainer getRightPouchContainer(Player player) {
+		return RIGHT_POUCH_CONTAINERS.computeIfAbsent(player, p ->
+				new SimpleContainer(MAX_POUCH_SLOTS));
 	}
 }
