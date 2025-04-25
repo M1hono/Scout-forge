@@ -175,9 +175,6 @@ repositories {
     }
     maven {
         url = "https://maven.theillusivec4.top/"
-        content {
-            includeGroup "top.theillusivec4.curios"
-        }
     }
     maven {
         name "KosmX's maven"
@@ -231,8 +228,7 @@ dependencies {
     }
 
     if (hasConfig("curios_version") && !config.curios_version.isEmpty()) {
-        compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${config.curios_version}")
-//        runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${config.curios_version}")
+        implementation fg.deobf("top.theillusivec4.curios:curios-forge:${config.curios_version}")
     }
 
     if (hasConfig("playeranimator_version") && !config.playeranimator_version.isEmpty()) {
@@ -292,9 +288,9 @@ dependencies {
     }
 
     // KubeJS Integrations.
-    compileOnly fg.deobf("dev.latvian.mods:kubejs-forge:${config.kubejs_version}")
-    compileOnly fg.deobf("dev.latvian.mods:rhino-forge:${config.rhino_version}")
-    implementation fg.deobf("dev.architectury:architectury-forge:${config.architectury_version}")
+//    compileOnly fg.deobf("dev.latvian.mods:kubejs-forge:${config.kubejs_version}")
+//    compileOnly fg.deobf("dev.latvian.mods:rhino-forge:${config.rhino_version}")
+//    implementation fg.deobf("dev.architectury:architectury-forge:${config.architectury_version}")
 
     def libraries = new File(file("libraries"), "${config.mc_version}")
     if (!libraries.isDirectory()) libraries.mkdirs()
@@ -506,7 +502,7 @@ curseforge {
                 if (one.isBlank()) continue
                 if (one.startsWith("@")) {
                     def pars = one.substring(1).split(":", 2)
-                    if (pars[0].equalsIgnoreCase("c")) {
+                    if (pars[0].equalsIgnoreCase("minecraft")) {
                         reqDeps.add pars[1].trim()
                     }
                 } else
@@ -519,7 +515,7 @@ curseforge {
                 if (one.isBlank()) continue
                 if (one.startsWith("@")) {
                     def pars = one.substring(1).split(":", 2)
-                    if (pars[0].equalsIgnoreCase("c")) {
+                    if (pars[0].equalsIgnoreCase("minecraft")) {
                         optDeps.add pars[1].trim()
                     }
                 } else
@@ -532,7 +528,7 @@ curseforge {
                 if (one.isBlank()) continue
                 if (one.startsWith("@")) {
                     def pars = one.substring(1).split(":", 2)
-                    if (pars[0].equalsIgnoreCase("c")) {
+                    if (pars[0].equalsIgnoreCase("minecraft")) {
                         incompat.add pars[1].trim()
                     }
                 } else
@@ -545,7 +541,7 @@ curseforge {
                 if (one.isBlank()) continue
                 if (one.startsWith("@")) {
                     def pars = one.substring(1).split(":", 2)
-                    if (pars[0].equalsIgnoreCase("c")) {
+                    if (pars[0].equalsIgnoreCase("minecraft")) {
                         embLibs.add pars[1].trim()
                     }
                 } else
