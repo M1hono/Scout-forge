@@ -389,9 +389,6 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
         return pointX >= (double)(i + x - 1) && pointX < (double)(i + x + width + 1) && pointY >= (double)(j + y - 1) && pointY < (double)(j + y + height + 1);
     }
 
-    @Shadow
-    public abstract int getXSize();
-
     @Override
     public T getMenu() {
         return menu;

@@ -20,7 +20,6 @@ import org.pickaid.scout.client.model.SatchelModel;
 import org.pickaid.scout.item.BaseBagItem;
 
 public class SatchelFeatureRenderer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
-	public static final ModelLayerLocation SATCHEL_LAYER = new ModelLayerLocation(new ResourceLocation("scout:satchel"), "layer0");
 	private static final ResourceLocation SATCHEL_TEXTURE = new ResourceLocation(ScoutUtil.MOD_ID, "textures/entity/satchel.png");
 	private static final ResourceLocation UPGRADED_SATCHEL_TEXTURE = new ResourceLocation(ScoutUtil.MOD_ID, "textures/entity/upgraded_satchel.png");
 
@@ -28,7 +27,7 @@ public class SatchelFeatureRenderer<T extends LivingEntity, M extends EntityMode
 
 	public SatchelFeatureRenderer(RenderLayerParent<T, M> render, EntityModelSet set) {
 		super(render);
-		this.satchel = new SatchelModel<>(set.bakeLayer(SATCHEL_LAYER));
+		this.satchel = new SatchelModel<>(SatchelModel.createBodyLayer().bakeRoot());
 	}
 
 	/**

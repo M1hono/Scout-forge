@@ -213,6 +213,7 @@ dependencies {
     compileOnly(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-common:${config.mixin_extras_version}"))
 
     compileOnly fg.deobf("com.tterrag.registrate:Registrate:${config.registrate_version}")
+    runtimeOnly fg.deobf("com.tterrag.registrate:Registrate:${config.registrate_version}")
     jarJar(group: 'com.tterrag.registrate', name: 'Registrate', version: "[MC1.20,MC1.21)")
 
     if (hasConfig("jei_version") && !config.jei_version.isEmpty()) {

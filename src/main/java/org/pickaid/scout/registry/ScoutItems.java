@@ -20,7 +20,7 @@ public class ScoutItems {
 		TANNED_LEATHER  = REGISTRATE.item("tanned_leather", Item::new)
 				.tab(CreativeModeTabs.TOOLS_AND_UTILITIES)
 				.register();
-		SATCHEL_STRAP  = REGISTRATE.item("tanned_leather", Item::new)
+		SATCHEL_STRAP  = REGISTRATE.item("satchel_strap", Item::new)
 				.tab(CreativeModeTabs.TOOLS_AND_UTILITIES)
 				.register();
 		SATCHEL  = REGISTRATE.item("satchel", properties ->  new BaseBagItem(ScoutUtil.MAX_SATCHEL_SLOTS / 2, BaseBagItem.BagType.SATCHEL))
