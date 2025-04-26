@@ -100,7 +100,7 @@ public class InventoryMenuMixin implements ScoutScreenHandler {
             BagSlot slot = new BagSlot(i, x, y);
             slot.setInventory(rightPouchContainer);
             slot.slot = ScoutUtil.RIGHT_POUCH_SLOT_START - i;
-e            slot.setEnabled(true);
+            slot.setEnabled(true);
             scout$rightPouchSlots.add(slot);
             ScoutUtil.LOGGER.debug("创建右侧口袋槽位 {}：位置=({}, {})", i, x, y);
         }
